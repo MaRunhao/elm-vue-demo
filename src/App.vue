@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header :seller="seller"></v-header>
     <div class="tab">
       <div class="tab-item"><router-link tag="a" to="/goods">商品</router-link></div>
       <div class="tab-item"><router-link to="/ratings">评论</router-link></div>
@@ -24,7 +24,6 @@ export default {
         response = response.data
         if (response.errno === ERR_OK) {
           this.seller = response.data
-          console.log(this.seller)
         }
       }, (response) => {
 
@@ -40,16 +39,20 @@ export default {
 
 <style lang="stylus" rel="stylesheet/stylus">
 @import "./common/stylus/mixin.styl"
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 #app
- .tab
+  line-height: 1
+  font-weight: 200
+  font-family: "微软雅黑", "Microsoft YaHei"
+  .clear-fix
+    display: inline-block
+    &:after
+      display: block
+      content: "."
+      height: 0
+      line-height: 0
+      clear: both
+      visibility: hidden
+  .tab
     display: flex
     position: relative
     width: 100%
@@ -60,7 +63,7 @@ export default {
         display: block
         width: 100%
         bottom: 0
-        border-bottom: 1px solid rgba(0, 20, 20, .5)
+        border-bottom: 1px solid rgba(0, 20, 20, .2)
         content: ' '
     .tab-item
         flex: 1

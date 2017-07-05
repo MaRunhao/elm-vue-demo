@@ -9,3 +9,7 @@ boder-1px($color)
   	border-top: 1px solid $color
   	content: ' '
   	
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media (-webkit-min-divice-pixel-ratio: 3), (min-divice-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")
