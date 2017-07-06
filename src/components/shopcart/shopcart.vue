@@ -4,7 +4,7 @@
 		<div class="content-left" @click="toggleList">
 			<div class="logo-wrapper">
 				<div class="logo" :class="{'highLight': totalCount>0}">
-					<i class="icon-cart"></i>
+					<i class="icon-shopping_cart"></i>
 				</div>
 				<div class="num" v-show="totalCount>0">{{totalCount}}</div>
 			</div>
@@ -230,11 +230,9 @@ import BScrool from 'better-scroll'
 						text-align: center
 						&.highLight
 							background: rgb(0, 160, 220)
-							.icon-cart:before
+							.icon-shopping_cart:before
 								color: #fff
-						.icon-cart:before
-							font-family: Arial, Helvetica, sans-serif
-							content: '\e116'
+						.icon-shopping_cart:before
 							font-size: 24px
 							color: #80885a
 							line-height: 44px

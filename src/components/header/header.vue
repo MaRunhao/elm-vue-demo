@@ -18,12 +18,12 @@
 				</div>
 			</div>
 			<div v-if="seller.supports" class="supports-more" @click="showDetail">
-				<span class="count">{{seller.supports.length}}个 &gt;</span>
+				<span class="count">{{seller.supports.length}}个<i class="icon-keyboard_arrow_right"></i></span>
 			</div>
 		</div>
 		<div class="bulletin-wrapper" @click="showDetail">
 			<span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
-			<i class="icon-arrow-right"></i>
+			<i class="icon-keyboard_arrow_right"></i>
 		</div>
 		<div class="background">
 			<img :src="seller.avatar" width="100%" height="100%">
@@ -121,8 +121,8 @@
 						width: 30px
 						height: 18px
 						vertical-align: bottom
-					  background: url("./brand@2x.png") no-repeat
-					  background-size: 30px 18px
+						background: url("./brand@2x.png") no-repeat
+						background-size: 30px 18px
 				.description
 					margin-bottom: 10px
 					line-height: 12px
@@ -163,6 +163,8 @@
 				.count
 					font-size: 12px
 					line-height: 24px
+					.icon-keyboard_arrow_right
+						padding-left: 2px
 		.bulletin-wrapper
 			position: relative
 			height: 28px
@@ -186,13 +188,11 @@
 				overflow: hidden
 				text-overflow: ellipsis
 				vertical-align: top
-			.icon-arrow-right::after
+			.icon-keyboard_arrow_right
 				position: absolute
 				font-size: 14px
-				font-family: 'Microsoft YaHei'
 				right: 10px
-				top: 0px
-				content: '>'
+				top: 6px
 		.background
 			position: absolute
 			top: 0

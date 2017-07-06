@@ -1,8 +1,8 @@
 <template>
 	<div class="cart-control">
 		<transition name="fade">
-			<div class="minus" @click="minusFood" v-show="food.count>0">
-				<i class="icon-circle-minus"></i>
+			<div class="minus" @click.stop.prevent="minusFood" v-show="food.count>0">
+				<i class="icon-remove_circle_outline"></i>
 			</div>
 		</transition>
 		<transition name="count">
@@ -10,8 +10,8 @@
 				{{food.count}}
 			</div>
 		</transition>
-		<div class="plus" @click="addFood">
-			<i class="icon-circle-plus"></i>
+		<div class="plus" @click.stop.prevent="addFood">
+			<i class="icon-add_circle"></i>
 		</div>
 	</div>	
 </template>
@@ -57,10 +57,6 @@
 			color: rgb(0,160,220)
 			padding: 0 5px
 			vertical-align: top
-			.icon-circle-minus:before
-				content: '-'
-			.icon-circle-plus:before
-				content: '＋'
 		.count
 			display: inline-block
 			font-size: 10px
