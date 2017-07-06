@@ -9,7 +9,7 @@
 		</div>
 		<div class="goods-wrapper" ref="foodsWrapper">
 		<ul>
-			<li v-for="item in goods" class="foods-list food-list-hook">
+			<li v-for="item in goods" class="foods-list food-list-hook" @click="selectFood(food, $event)">
 				<h1 class="title">{{item.name}}</h1>
 				<ul>
 					<li v-for="food in item.foods" class="food-item">
@@ -27,16 +27,24 @@
 								<span><span class="unit">￥</span>{{food.price}}</span>
 								<span v-show="food.oldPrice" class="oldPrice">￥{{food.oldPrice}}</span>
 							</div>
+							<div class="control-wrapper">
+								<cart-control :food="food"></cart-control>
+							</div>
 						</div>
 					</li>
 				</ul>
 			</li>
 		</ul>
 		</div>
+		<shopcart :ref="shopcart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :select-foods="selectFoods"></shopcart>
+		<food :food="selectFood"></food>
 	</div>	
 </template>
 <script>
 import BScroll from 'better-scroll'
+import shopcart from '@/components/shopcart/shopcart'
+import cartControl from '@/components/cartControl/cartControl'
+import food from '@/components/food/food'
   const ERR_OK = 0
   export default {
     props: {
@@ -46,7 +54,8 @@ import BScroll from 'better-scroll'
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectFood: {}
       }
     },
     created () {
@@ -73,14 +82,32 @@ import BScroll from 'better-scroll'
           }
         }
         return 0
+      },
+      selectFoods () {
+        let foods = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     methods: {
+      _drop (target) {
+        // 异步执行动画，优化体验
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target)
+        })
+      },
       _initScroll () {
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {
           click: true
         })
         this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
+          click: true,
           probeType: 3
         })
         this.foodScroll.on('scroll', (pos) => {
@@ -104,6 +131,22 @@ import BScroll from 'better-scroll'
         let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
         let el = foodList[index]
         this.foodScroll.scrollToElement(el, 300)
+      },
+      selectFood (food, event) {
+        if (!event._constructed) {
+          return
+        }
+        this.selectFood = food
+      }
+    },
+    components: {
+      shopcart,
+      cartControl,
+      food
+    },
+    events: {
+      'cart.add' (target) {
+        this._drop(target)
       }
     }
   }
@@ -178,6 +221,7 @@ import BScroll from 'better-scroll'
 					flex: 0 0 57px
 					margin-right: 10px
 				.content
+					position: relative
 					flex: 1
 					.name
 						margin: 2px 0 8px
@@ -211,5 +255,8 @@ import BScroll from 'better-scroll'
 							line-height: 10px
 							text-decoration: line-through
 							vertical-align: middle
-							
+					.control-wrapper
+						position: absolute
+						right: 0
+						bottom: 0
 </style>
