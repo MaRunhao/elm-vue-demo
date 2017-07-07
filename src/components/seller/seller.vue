@@ -28,6 +28,10 @@
 						</div>
 					</li>
 				</ul>
+				<div class="favorite" @click="toggleFavorite">
+					<i class="icon-favorite" :class="{'active': favorite}"></i>
+					<span class="text">{{favoriteText}}</span>
+				</div>
 			</div>
 			<split></split>
 			<div class="bulletin">
@@ -54,6 +58,14 @@
 				</div>
 			</div>
 			<split></split>
+			<div class="info">
+				<h1 class="title">商家信息</h1>
+				<ul>
+					<li class="info-item" v-for="info in seller.infos">
+						<p class="text">{{info}}</p>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
@@ -61,9 +73,22 @@
 import star from '@/components/star/star'
 import split from '@/components/split/split'
 import BScroll from 'better-scroll'
+import {saveToLocal, loadFromLocal} from '@/common/js/store'
   export default{
     props: {
       seller: Object
+    },
+    data () {
+      return {
+        favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false)
+        })()
+      }
+    },
+    computed: {
+      favoriteText () {
+        return this.favorite ? '已收藏' : '收藏'
+      }
     },
     components: {
       star,
@@ -87,6 +112,13 @@ import BScroll from 'better-scroll'
       }
     },
     methods: {
+      toggleFavorite (event) {
+        if (!event._constructed) {
+          return
+        }
+        this.favorite = !this.favorite
+        saveToLocal(this.seller.id, 'favorite', this.favorite)
+      },
       _initScroll () {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.sellerDiv, {
@@ -126,6 +158,7 @@ import BScroll from 'better-scroll'
 		width: 100%
 		overflow: hidden
 		.overview
+			position: relative
 			padding: 18px
 			.title
 				margin-bottom: 8px
@@ -168,6 +201,24 @@ import BScroll from 'better-scroll'
 						line-height: 24px
 						.unit
 							font-size: 10px
+			.favorite
+				position: absolute
+				top: 18px
+				right: 18px
+				width: 36px
+				text-align: center
+				.icon-favorite
+					display: block
+					font-size: 24px
+					line-height: 24px
+					color: #d4d6d9
+					margin-bottom: 4px
+					&.active
+						color: rgb(240,20,20)
+				.text
+					font-size: 10px
+					line-height: 10px
+					color: rgb(77,85,93)
 		.bulletin
 			margin: 0 18px
 			padding-top: 18px
@@ -234,4 +285,19 @@ import BScroll from 'better-scroll'
 						height: 90px
 						&:last-child
 							margin-right: 0
+		.info
+			margin: 18px 18px 0
+			.title
+				margin-bottom: 12px
+				font-size: 14px
+				line-height: 14px
+				color: rgb(7,17,27)
+			.info-item
+				padding: 16px 12px
+				border-top: 1px solid rgba(7,17,27,.1)
+				.text
+					font-size: 12px
+					font-weight: 200
+					line-height: 16px
+					color: rgb(7,17,27)
 </style>
