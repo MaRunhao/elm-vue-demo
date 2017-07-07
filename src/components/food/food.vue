@@ -116,7 +116,7 @@ const ALL = 2
         if (!event._constructed) {
           return
         }
-        // this.$dispatch('cart.add', event.target)
+        this.$emit('add', event.target)
         Vue.set(this.food, 'count', 1)
       },
       needShow (type, text) {

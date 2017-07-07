@@ -37,7 +37,7 @@
 		</ul>
 		</div>
 		<shopcart ref="shopcart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :select-foods="selectFoods"></shopcart>
-		<food :food="selectFood" ref="food"></food>
+		<food :food="selectFood" ref="food" @add="addFood"></food>
 	</div>	
 </template>
 <script>
@@ -96,6 +96,9 @@ import food from '@/components/food/food'
       }
     },
     methods: {
+      addFood (target) {
+        this._drop(target)
+      }
       _drop (target) {
         // 异步执行动画，优化体验
         this.$nextTick(() => {
@@ -144,11 +147,6 @@ import food from '@/components/food/food'
       shopcart,
       cartControl,
       food
-    },
-    events: {
-      'cart.add' (target) {
-        this._drop(target)
-      }
     }
   }
 </script>

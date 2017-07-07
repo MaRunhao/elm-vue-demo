@@ -48,13 +48,13 @@ const ALL = 2
           return
         }
         this.selectType = type
-        this.$dispatch('ratingtype.select', type)
+        this.$emit('select', type)
       },
       toggleContent (event) {
         if (!event._constructed) {
           return
         }
-        this.onlyContent = !this.onlyContent
+        this.$emit('toggle')
       }
     },
     computed: {
