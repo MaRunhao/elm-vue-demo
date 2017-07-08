@@ -32,7 +32,7 @@
           this.food.count++
         }
         console.log(this)
-        this.$emit('cart.add', event.target)
+        this.$emit('add', event.target)
       },
       minusFood () {
         if (!event._constructed) {
