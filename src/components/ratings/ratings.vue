@@ -26,7 +26,7 @@
 			</div>
 		</div>
 		<split></split>
-		<ratingselect :selectType="selectType" :onlyContent="onlyContent" :ratings="ratings" :desc="desc"></ratingselect>
+		<ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent" :ratings="ratings" :desc="desc"></ratingselect>
 		<div class="rating-wrapper">
 			<ul>
 				<li v-for="rating in ratings" class="rating-item" v-show="needShow(rating.rateType, rating.text)">
@@ -82,15 +82,45 @@ const ERR_OK = 0
         }
       }
     },
+    mounted () {
+      this.$nextTick(() => {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.ratingDiv, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
+      })
+    },
+    watch: {
+      'seller' () {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.ratingDiv, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
+      }
+    },
     created () {
       this.$http.get('/api/ratings').then((response) => {
         response = response.data
         if (response.errno === ERR_OK) {
           this.ratings = response.data
           this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.ratingDiv, {
-              click: true
-            })
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.ratingDiv, {
+                click: true
+              })
+            } else {
+              this.scroll.refresh()
+            }
           })
         }
       })
@@ -105,6 +135,18 @@ const ERR_OK = 0
         } else {
           return type === this.selectType
         }
+      },
+      selectRating(type) {
+        this.selectType = type
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
+      },
+      toggleContent() {
+        this.onlyContent = !this.onlyContent
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
       }
     },
     filters: {

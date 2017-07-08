@@ -98,7 +98,7 @@ import food from '@/components/food/food'
     methods: {
       addFood (target) {
         this._drop(target)
-      }
+      },
       _drop (target) {
         // 异步执行动画，优化体验
         this.$nextTick(() => {

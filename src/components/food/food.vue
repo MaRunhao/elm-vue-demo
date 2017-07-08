@@ -23,7 +23,7 @@
 						</div>
 					</transition>
 					<div class="cart-control-wrapper">
-						<cart-control :food="food"></cart-control>
+						<cart-control :food="food" @add="addFood"></cart-control>
 					</div>
 				</div>
 				<split v-show="food.info"></split>
@@ -34,7 +34,7 @@
 				<split></split>
 				<div class="food-rating">
 					<h1 class="title">商品评价</h1>
-					<ratingselect :ratings="food.ratings" :select-type="selectType" :only-content="onlyContent" :desc="desc"></ratingselect>
+					<ratingselect @select="selectRating" @toggle="toggleContent" :ratings="food.ratings" :select-type="selectType" :only-content="onlyContent" :desc="desc"></ratingselect>
 					<div class="rating-wrapper">
 						<ul v-if="food.ratings && food.ratings.length">
 							<li v-show="needShow(rating.rateType, rating.text)" v-for="rating in food.ratings" class="rating-item">
@@ -86,8 +86,6 @@ const ALL = 2
         }
       }
     },
-    computed: {
-    },
     filters: {
       parseTime (time) {
         let date = new Date(time)
@@ -128,17 +126,18 @@ const ALL = 2
         } else {
           return type === this.selectType
         }
-      }
-    },
-    events: {
-      'ratingtype.select' (type) {
+      },
+      addFood(target) {
+        this.$emit('add', target)
+      },
+      selectRating(type) {
         this.selectType = type
         this.$nextTick(() => {
           this.scroll.refresh()
         })
       },
-      'content.toggle' (onlyContent) {
-        this.onlyContent = onlyContent
+      toggleContent() {
+        this.onlyContent = !this.onlyContent
         this.$nextTick(() => {
           this.scroll.refresh()
         })

@@ -1,9 +1,9 @@
 <template>
 	<div class="rating-select">
 		<div class="rating-type">
-			<span class="block all" :class="{'active': selectType===2}" @click="select(2,$event)">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
-			<span class="block positive" :class="{'active': selectType===0}" @click="select(0,$event)">{{desc.positive}}<span class="count">{{positiveRatings.length}}</span></span>
-			<span class="block negative" :class="{'active': selectType===1}" @click="select(1,$event)">{{desc.negative}}<span class="count">{{negativeRatings.length}}</span></span>
+			<span class="block all" :class="{'active': curSelectType===2}" @click="select(2,$event)">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
+			<span class="block positive" :class="{'active': curSelectType===0}" @click="select(0,$event)">{{desc.positive}}<span class="count">{{positiveRatings.length}}</span></span>
+			<span class="block negative" :class="{'active': curSelectType===1}" @click="select(1,$event)">{{desc.negative}}<span class="count">{{negativeRatings.length}}</span></span>
 		</div>
 		<div class="switch" :class="{'on': onlyContent}" @click="toggleContent">
 			<i class="icon-check_circle"></i>
@@ -42,12 +42,20 @@ const ALL = 2
         }
       }
     },
+    data () {
+      return {
+        curRatings: this.ratings,
+        curSelectType: this.selectType,
+        curOnlyContent: this.onlyContent,
+        curDesc: this.desc
+      }
+    },
     methods: {
       select (type, event) {
         if (!event._constructed) {
           return
         }
-        this.selectType = type
+        this.curSelectType = type
         this.$emit('select', type)
       },
       toggleContent (event) {
